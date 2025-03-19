@@ -167,4 +167,22 @@ df_salaries = pd.read_csv('salary_data.csv', sep=';')
 df_salaries
 
 # the file must be in the path of the folder
+
+df_salaries.dtypes
+# result is: 
+# ID int64
+# income float64
+# age int64
+# gender object
+# education_level float64
+
+#Conditions filters
+is_woman = df_salaries['gender'] == 'F'
+
+df_womans = df_salaries.loc[is_woman]
+
+df_womans
+
+df_womans['income'].max()
+# return the woman that gain the most money
 ```
