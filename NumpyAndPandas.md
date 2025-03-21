@@ -186,3 +186,68 @@ df_womans
 df_womans['income'].max()
 # return the woman that gain the most money
 ```
+
+```py
+import pandas as pd
+
+df.sample(4, random_state=1) # return 4 random rows from the dataframe with a fixed seed for reproducibility of the results
+
+df.col1 # return the first column of the dataframe and the dtype
+
+type(df.col1) # return the type of the first column of the dataframe
+
+df.col1 is df['col1'] # return True if the first column of the dataframe is the same as the second column of the dataframe the df['col1'] is more readable
+
+#slicing a dataframe
+df[['col1', 'col2']] # return the first and second column of the dataframe
+
+df['col3'].dtype # return a special type of panda like 'O' for object
+
+df.dtypes # return the types of the columns of the dataframe
+```
+
+# Methods of pandas
+
+```py
+.head() # return the first n rows of the dataframe
+.tail() # return the last n rows of the dataframe
+.describe() # return a summary of the dataframe
+.max() # return the maximum value of the dataframe
+.min() # return the minimum value of the dataframe
+.mean() # return the mean value of the dataframe
+.median() # return the median value of the dataframe
+.std() # return the standard deviation of the dataframe
+.sample() # return a random sample of the dataframe
+.dropna() # return the dataframe without the rows with missing values
+```
+
+# Filter information
+```py
+_the_toy_is_red = df['color'] == 'red'
+
+df[_the_toy_is_red] # return the dataframe and put true if the color is red
+
+df.loc[_the_toy_is_red] # return the dataframe where the color is red
+
+df._the_toy_is_red.shape # return the shape of the dataframe
+
+# divide only the reds in other dataframe
+
+df_reds = df[_the_toy_is_red]
+
+df_reds.shape # return the shape of the dataframe
+
+
+# calculate the maximum salary for a person with level 1 of studies
+
+df[df['education_level'] == 1]['income'].max() # return the maximum salary for a person with level 1 of studies
+
+is_level_1 = df['education_level'] == 1 # return True if the education level is 1
+
+is_level_1.value_counts() # return the number of people with level 1 of studies
+
+df_level_1 = df[is_level_1] # return the dataframe where the education level is 1
+
+max_salary = df_level_1['income'].max() # return the maximum salary for a person with level 1 of studies
+print(f'The maximum salary for a person with level 1 of studies is {max_salary, 2}') # return the maximum salary for a person with level 1 of studies with 2 decimal places
+```
