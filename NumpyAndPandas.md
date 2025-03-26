@@ -251,3 +251,66 @@ df_level_1 = df[is_level_1] # return the dataframe where the education level is 
 max_salary = df_level_1['income'].max() # return the maximum salary for a person with level 1 of studies
 print(f'The maximum salary for a person with level 1 of studies is {max_salary, 2}') # return the maximum salary for a person with level 1 of studies with 2 decimal places
 ```
+
+# Group information
+### Histograma
+- a histogram is a graph that shows the frequency of values in a dataset
+```py
+df.groupby('education_level')['income'].mean() # return the mean of the income for each education level
+df.show() # return the dataframe with the mean of the income for each education level and the number of people with each education level
+
+# pd.read_csv("archivo.csv", sep=";")
+# → read the data from a csv file.
+
+# df.groupby('education_level')
+# → group the data by education level.
+
+# .plot(kind='hist', bins=20, alpha=0.5, legend=True)
+# → generate a histogram of the mean income for each education level.:
+
+# kind='hist' → specifies that the plot should be a histogram.
+
+# bins=20 → divide the data into 20 bins intervals.
+
+# alpha=0.5 → Add transparency to the histogram.
+
+# legend=True → Add a legend for each level of education.
+
+df.groupby('education_level')['income'].mean().plot(kind='hist', bins=20, alpha=0.5, legend=True)
+
+```
+#### Another solution
+```py
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. histograma of education level
+ptl.hist(df['education_level'])
+plt.show()
+
+# 2. histograma of income for each level of education
+condition = df['education_level'] == 0
+df_filtered = df.loc[condition]
+# plt.hist(df_filtered['income'])
+df_filtered.hist(column='income')
+# plt.show()
+
+# another way
+df.loc[df['education_level'] == 0].hist(column='income')
+plt.show()
+```
+
+# graphics of boxs and whiskersa
+- show in a unidimentional way the median, cuartiles and outliers, atipic values, etc.
+```py
+df.boxplot(column='income') # return the boxplot of the income column
+ptl.show()
+# empty circles in the graphic are the atipic dates
+# the green line is the median
+
+db.bloxplot(column='income', by='education_level') # return the boxplot of the income column by education level
+
+```
+
