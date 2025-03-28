@@ -313,4 +313,88 @@ ptl.show()
 db.bloxplot(column='income', by='education_level') # return the boxplot of the income column by education level
 
 ```
+# Primer KNN
+- KNN = K nearest neighbors
+- K = number of neighbors
+- KNN is a supervised learning algorithm
+- KNN is a lazy learning algorithm
+- KNN is a non parametric algorithm
+- KNN is a non linear algorithm
+- KNN is a non deterministic algorithm
+- KNN is a non probabilistic algorithm
 
+#### example
+- if k= 5
+- kj = x1, x2, x3, x4, x5 nearest neighbors
+- if there are more blue than red the prediction of the class blue
+- x1, x2, x3, x4, x5 are in the class y1
+
+
+
+```py
+import pandas as pd
+df = pd.read_csv('breast-cancer-wisconsin.csv', sep=',')
+
+df.sample(5) # return 5 random rows of the dataframe
+
+df['Núcleos desnudos'].value_counts() # return the number of rows for each value of the column 'Núcleos desnudos'
+
+# what i'm suppose to do if there one class give me a ?
+# it is because the type change from int to object
+# kick values with ? in the column 'Núcleos desnudos'
+df = df.loc[df['Núcleos desnudos'] != '?']
+
+df =df.reset_index(drop=True) # reset the index of the dataframe after delete the ?
+
+#it keeps like an object so we need to do a cast
+df['Núcleos desnudos'] = df['Núcleos desnudos'].astype('int64') # change the type of the column 'Núcleos desnudos' to int64
+
+#kick the column 'Id'
+df = df.drop(columns=['Id'])
+```
+
+```py
+# Vamos a dividir los datos como datos de entrenamiento (data training) y los datos de prueba (data testing)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+X_train.shape, X_test.shape # return the shape of the training data
+
+#Corregido 
+# import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Cargar el archivo CSV y limpiar los nombres de las columnas
+file_path = "breast-cancer-wisconsin.csv"
+df = pd.read_csv(file_path, sep=',')
+df.columns = df.columns.str.strip()  # Eliminar espacios en los nombres de las columnas
+
+# Verificar valores únicos en la columna 'Núcleos desnudos'
+if 'Núcleos desnudos' in df.columns and '?' in df['Núcleos desnudos'].values:
+    df = df[df['Núcleos desnudos'] != '?']  # Eliminar filas con valores '?'
+
+# Resetear el índice después de eliminar filas
+df = df.reset_index(drop=True)
+
+# Convertir la columna a tipo numérico si existe
+if 'Núcleos desnudos' in df.columns:
+    df['Núcleos desnudos'] = df['Núcleos desnudos'].astype(int)
+
+# Eliminar la columna 'Id' si existe
+if 'Id' in df.columns:
+    df = df.drop(columns=['Id'])
+
+# Separar en datos de entrada (X) y etiquetas de salida (y) si 'Clase' existe
+if 'Clase' in df.columns:
+    X = df.drop(columns=['Clase'])
+    y = df['Clase']
+
+    # Dividir los datos en entrenamiento y prueba
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Mostrar las dimensiones de los conjuntos de entrenamiento y prueba
+    X_train.shape, X_test.shape
+ 
+```
