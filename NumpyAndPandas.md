@@ -1,4 +1,5 @@
 # Numpy
+
 - is a library that provides support for large, multi-dimensional arrays and matrices, along with a large collection of high-level mathematical functions to operate on these arrays.
 
 - A problem is that u can't mix types of data, due to the fact that Numpy is a C library.
@@ -45,7 +46,7 @@ array_3d = np.array(
         [
             [1.2, 2.3, 3.4],
             [4, 5, 6]
-        ], 
+        ],
         [
             [7, 8, 9],
             [10, 11, 12]
@@ -88,7 +89,7 @@ squared_array.dtype
 
 # change array 2d to float
 array_2d_float = array_2d / 1
-print(array_2d_float) # This i a CAST 
+print(array_2d_float) # This i a CAST
 print(array_2d_float.dtype) # result is: float64
 # A cast is a conversion from one data type to another.
 
@@ -101,6 +102,7 @@ print(primes[0:5]) # result is: [2, 3, 5, 7, 11]
 ```
 
 # Pandas
+
 - Pandas is a software library build on top of Numpy that provides high-performance, easy-to-use data structures and data analysis tools for Python. (data structures tabulated)
 
 ### Usage:
@@ -114,7 +116,7 @@ import pandas as pd
 
 df = pd.DataFrame({'col1': [1, 2, 3], 'col2': [4, 5, 6], 'col3': ['a', 'b', 'c']})
 print(df)
-# result is:    
+# result is:
 #       col1  col2  col3
 # 0     1     4     a
 # 1     2     5     b
@@ -123,7 +125,7 @@ print(df)
 # The head() method returns the first n rows of the DataFrame.
 
 print(df.head())
-# result is:    
+# result is:
 #       col1  col2  col3
 # 0     1     4     a
 # 1     2     5     b
@@ -131,7 +133,7 @@ print(df.head())
 # The tail() method returns the last n rows of the DataFrame.
 
 print(df.tail())
-# result is:    
+# result is:
 #       col1  col2  col3
 # 1     2     5     b
 # 2     3     6     c
@@ -139,14 +141,14 @@ print(df.tail())
 # The sample() method returns a random sample of the DataFrame.
 
 print(df.sample())
-# result is:    
+# result is:
 #       col1  col2  col3
 # 1     2     5     b
 
 # The describe() method returns a summary of the DataFrame.
 
 print(df.describe())
-# result is:    
+# result is:
 #       col1  col2
 # count  3.0  3.0
 # mean   2.0  5.0
@@ -157,9 +159,11 @@ print(df.describe())
 # 75%    2.5  5.5
 # max    3.0  6.0
 ```
-**Important:** if you change the data from excel to a csv file the separation of each coma will be with , besides a ; it is called data *sesgada*
+
+**Important:** if you change the data from excel to a csv file the separation of each coma will be with , besides a ; it is called data _sesgada_
 
 #### organize data as csv
+
 ```py
 import pandas as pd
 
@@ -169,7 +173,7 @@ df_salaries
 # the file must be in the path of the folder
 
 df_salaries.dtypes
-# result is: 
+# result is:
 # ID int64
 # income float64
 # age int64
@@ -222,6 +226,7 @@ df.dtypes # return the types of the columns of the dataframe
 ```
 
 # Filter information
+
 ```py
 _the_toy_is_red = df['color'] == 'red'
 
@@ -253,8 +258,11 @@ print(f'The maximum salary for a person with level 1 of studies is {max_salary, 
 ```
 
 # Group information
+
 ### Histograma
+
 - a histogram is a graph that shows the frequency of values in a dataset
+
 ```py
 df.groupby('education_level')['income'].mean() # return the mean of the income for each education level
 df.show() # return the dataframe with the mean of the income for each education level and the number of people with each education level
@@ -279,7 +287,9 @@ df.show() # return the dataframe with the mean of the income for each education 
 df.groupby('education_level')['income'].mean().plot(kind='hist', bins=20, alpha=0.5, legend=True)
 
 ```
+
 #### Another solution
+
 ```py
 
 import pandas as pd
@@ -303,7 +313,9 @@ plt.show()
 ```
 
 # graphics of boxs and whiskersa
+
 - show in a unidimentional way the median, cuartiles and outliers, atipic values, etc.
+
 ```py
 df.boxplot(column='income') # return the boxplot of the income column
 ptl.show()
@@ -313,7 +325,9 @@ ptl.show()
 db.bloxplot(column='income', by='education_level') # return the boxplot of the income column by education level
 
 ```
+
 # Primer KNN
+
 - KNN = K nearest neighbors
 - K = number of neighbors
 - KNN is a supervised learning algorithm
@@ -324,12 +338,11 @@ db.bloxplot(column='income', by='education_level') # return the boxplot of the i
 - KNN is a non probabilistic algorithm
 
 #### example
+
 - if k= 5
 - kj = x1, x2, x3, x4, x5 nearest neighbors
 - if there are more blue than red the prediction of the class blue
 - x1, x2, x3, x4, x5 are in the class y1
-
-
 
 ```py
 import pandas as pd
@@ -362,7 +375,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 X_train.shape, X_test.shape # return the shape of the training data
 
-#Corregido 
+#Corregido
 # import pandas as pd
 from sklearn.model_selection import train_test_split
 
@@ -396,5 +409,279 @@ if 'Clase' in df.columns:
 
     # Mostrar las dimensiones de los conjuntos de entrenamiento y prueba
     X_train.shape, X_test.shape
- 
+
+    # y is a sub serie of pandas
+
 ```
+
+### Do a reescale of the caracteristics of $X_{train}$ and $X_{test}$
+
+1. We'll save the list of originals columns in $X_{train}$
+2. we'll reescale $X_{train}$ and $X_{test}$ with sklearn
+3. we'll notice that $X_{train}$ and $X_{test}$ pass from dataframes of pandas to arrays of numpy
+4. become $X_{train}$ and $X_{test}$ again dataframes of pandas
+
+```py
+
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+
+#save columns
+my_cols = x_train.columns
+
+# reescale x_train and x_test
+my_scaler = StandardScaler() # create the scaler
+x_train = my_scaler.fit_transform(x_train) # apply the scaler
+x_test = my_scaler.transform(x_test) # apply the scaler
+
+# notice that x_train and x_test pass from dataframes to arrays and the quantity reprents the number of dimensions
+
+# recover the dataframe format of pandas in x_train and x_test
+
+x_train = pd.DataFrame(x_train, columns=my_cols)
+x_test = pd.DataFrame(x_test, columns=my_cols)
+```
+
+# Usage of the first machine learning model knn and tain it with $X_{train}$ and $y_{train}$
+
+```py
+from sklearn.neighbors import KNeighborsClassifier
+
+# instance model knn
+my_knn = KNeighborsClassifier(n_neighbors=5)
+
+# train the model
+my_knn.fit(x_train, y_train)
+
+# predict the class y_pred for x_test with our knn
+y_pred = my_knn.predict(x_test)
+
+# evaluate the score ofr presicion of y_pred with y_test
+
+score_of_presicion = acuracy_score(y_test, y_pred)
+print(f'The score of presicion is {score_of_presicion:.4f}')
+```
+
+### Prove the behavior of the model to predict new pacients
+
+```py
+df.info() # return the information of the dataframe
+df.mean() # return the mean of the dataframe
+df.median() # return the median of the dataframe (the most popular values)
+df.std() # return the standard deviation of the dataframe
+my_pacients = {
+    'Grosor del grumo':[4,4 + 3, 4 - 3],
+    'Uniformidad del tamaño de las células':[1, 1 + 3, 0],
+    'Uniformidad de la forma de las célular': [1, 1 + 3, 0],
+    'Adhesión marginal': [1,4,0],
+    'Tamaño de una sola célula epitelial': [2, 2 + 2, 2 - 2],
+    'Núcleos desnudos': [1, 1 + 4, 1 - 4],
+    'Cromatina suave': [3, 3 + 2, 3 - 2],
+    'Núcleos normales': [1, 1 + 3, 0],
+    'Mitosis': [1, 1 + 2, 0],
+    } # we are taking first a pacient with the median o average, then a pacient with most desviation and a pacient with less desviation this is to predict what kind of cancer they have
+
+    X_test.head()
+my_pacients = pd.DataFrame(my_pacients) # convert the dictionary to a dataframe
+my_pacients # return the dataframe
+df.info() # return the information of the dataframe
+
+```
+
+1. Lets prove with new pacients our model of machine learning KNN, making a new dataframe or setting a new csv
+
+2. lets reescale the new dataframe
+
+3. make the casification of the new pacients with our model KNN
+
+```py
+# lets reescale the pacients
+
+my_pacients = my_scaler.transform(my_pacients) # apply the scaler
+
+my_pacients # return the dataframe
+
+my_pacients = pd.DataFrame(my_pacients, columns=my_cols) # recover the dataframe format of pandas in my_pacients
+
+my_pacients # return the dataframe
+
+clasification = my_knn.predict(my_pacients) # predict the class y_pred for my_pacients with our knn
+
+clasification # return the median, the median aumented and the median reduced. First pacient is a bening cancer, second is maligne and the last is bening
+```
+
+## Resume
+1. We load the base of data of pacients
+2. We filter by columns
+3. We create train data $X_{train}$ and test data $X_{test}, $y_{train}$ and $y_{test}$
+4. We reescale the train data $X_{train}$ and test data $X_{test}$ to work well in the KNN model
+5. We create our model  KNN and train it with $X_{train}$ and $y_{train}$
+6. We prove the eficiency of our KNN with $X_{test}$ and $y_{test}$
+7. Our KNN model is ready and able to be apllied to new pacients
+
+
+# ALL ABOUT KNN ORGANICED
+---
+
+### **K-Nearest Neighbors (KNN) - Breast Cancer Classification**
+
+#### **Introduction to KNN**
+KNN (K-Nearest Neighbors) is a supervised learning algorithm that classifies data based on the majority class of its nearest neighbors.
+
+- **K** = Number of neighbors.
+- KNN is a **lazy learning** algorithm (it does not build a model beforehand).
+- KNN is **non-parametric** (does not assume any distribution).
+- KNN is **non-linear**, **non-deterministic**, and **non-probabilistic**.
+
+---
+
+### **Example of KNN Classification**
+- Given **K = 5**, the algorithm selects the **5 nearest neighbors**.
+- If more neighbors belong to **class blue** than **class red**, the prediction will be **blue**.
+
+---
+
+## **1. Data Preprocessing**
+We will use the **Breast Cancer Wisconsin** dataset for this classification task.
+
+### **Load the Dataset**
+```python
+import pandas as pd
+
+# Load the dataset
+df = pd.read_csv("breast-cancer-wisconsin.csv", sep=",")
+
+# Display 5 random samples
+print(df.sample(5))
+
+# Check unique values in 'Núcleos desnudos'
+print(df['Núcleos desnudos'].value_counts())
+```
+
+### **Handling Missing Values**
+The dataset contains missing values marked as `'?'`. We will remove these values.
+
+```python
+# Remove rows where 'Núcleos desnudos' is '?'
+df = df[df['Núcleos desnudos'] != '?'].reset_index(drop=True)
+
+# Convert 'Núcleos desnudos' to integer type
+df['Núcleos desnudos'] = df['Núcleos desnudos'].astype(int)
+
+# Drop the 'Id' column if it exists
+if 'Id' in df.columns:
+    df = df.drop(columns=['Id'])
+
+# Separate input features (X) and target labels (y)
+X = df.drop(columns=['Clase'])
+y = df['Clase']
+```
+
+---
+
+## **2. Splitting the Data**
+We divide the dataset into **training (80%)** and **testing (20%)** sets.
+
+```python
+from sklearn.model_selection import train_test_split
+
+# Split data into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+# Check the shape of training and testing sets
+print(X_train.shape, X_test.shape)
+```
+
+---
+
+## **3. Feature Scaling**
+Feature scaling improves model performance by normalizing the data.
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+# Save column names
+feature_columns = X_train.columns
+
+# Apply scaling
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Convert back to DataFrame
+X_train = pd.DataFrame(X_train, columns=feature_columns)
+X_test = pd.DataFrame(X_test, columns=feature_columns)
+```
+
+---
+
+## **4. Training the KNN Model**
+We train a **KNN classifier** with `K=5`.
+
+```python
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Instantiate and train the model
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X_train, y_train)
+
+# Make predictions
+y_pred = knn.predict(X_test)
+
+# Evaluate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print(f"The accuracy of the KNN model is: {accuracy:.4f}")
+```
+
+---
+
+## **5. Predicting for New Patients**
+To test the model, we will classify three new patients: 
+- **One with average values**.
+- **One with increased values (more deviation).**
+- **One with decreased values (less deviation).**
+
+### **Create a New Patients Dataset**
+```python
+# New patient data
+new_patients = {
+    'Grosor del grumo': [4, 4 + 3, 4 - 3],
+    'Uniformidad del tamaño de las células': [1, 1 + 3, 0],
+    'Uniformidad de la forma de las células': [1, 1 + 3, 0],
+    'Adhesión marginal': [1, 4, 0],
+    'Tamaño de una sola célula epitelial': [2, 2 + 2, 2 - 2],
+    'Núcleos desnudos': [1, 1 + 4, 1 - 4],
+    'Cromatina suave': [3, 3 + 2, 3 - 2],
+    'Núcleos normales': [1, 1 + 3, 0],
+    'Mitosis': [1, 1 + 2, 0],
+}
+
+# Convert to DataFrame
+new_patients = pd.DataFrame(new_patients)
+
+# Scale the new patient data
+new_patients_scaled = scaler.transform(new_patients)
+new_patients_scaled = pd.DataFrame(new_patients_scaled, columns=feature_columns)
+
+# Predict classifications
+predictions = knn.predict(new_patients_scaled)
+
+# Print results
+print("Predictions for new patients:", predictions)
+```
+- **First patient** → **Benign**
+- **Second patient** → **Malignant**
+- **Third patient** → **Benign**
+
+---
+
+## **6. Summary of the Process**
+1. **Loaded the patient dataset**.
+2. **Filtered and cleaned** unnecessary columns and missing values.
+3. **Split the data** into training and testing sets.
+4. **Scaled the features** to improve model performance.
+5. **Trained a KNN model** with `K=5`.
+6. **Evaluated model accuracy** on test data.
+7. **Tested model predictions** with new patients.
