@@ -512,21 +512,23 @@ clasification # return the median, the median aumented and the median reduced. F
 ```
 
 ## Resume
+
 1. We load the base of data of pacients
 2. We filter by columns
 3. We create train data $X_{train}$ and test data $X_{test}, $y_{train}$ and $y_{test}$
 4. We reescale the train data $X_{train}$ and test data $X_{test}$ to work well in the KNN model
-5. We create our model  KNN and train it with $X_{train}$ and $y_{train}$
+5. We create our model KNN and train it with $X_{train}$ and $y_{train}$
 6. We prove the eficiency of our KNN with $X_{test}$ and $y_{test}$
 7. Our KNN model is ready and able to be apllied to new pacients
 
-
 # ALL ABOUT KNN ORGANICED
+
 ---
 
 ### **K-Nearest Neighbors (KNN) - Breast Cancer Classification**
 
 #### **Introduction to KNN**
+
 KNN (K-Nearest Neighbors) is a supervised learning algorithm that classifies data based on the majority class of its nearest neighbors.
 
 - **K** = Number of neighbors.
@@ -537,15 +539,18 @@ KNN (K-Nearest Neighbors) is a supervised learning algorithm that classifies dat
 ---
 
 ### **Example of KNN Classification**
+
 - Given **K = 5**, the algorithm selects the **5 nearest neighbors**.
 - If more neighbors belong to **class blue** than **class red**, the prediction will be **blue**.
 
 ---
 
 ## **1. Data Preprocessing**
+
 We will use the **Breast Cancer Wisconsin** dataset for this classification task.
 
 ### **Load the Dataset**
+
 ```python
 import pandas as pd
 
@@ -560,6 +565,7 @@ print(df['Núcleos desnudos'].value_counts())
 ```
 
 ### **Handling Missing Values**
+
 The dataset contains missing values marked as `'?'`. We will remove these values.
 
 ```python
@@ -581,6 +587,7 @@ y = df['Clase']
 ---
 
 ## **2. Splitting the Data**
+
 We divide the dataset into **training (80%)** and **testing (20%)** sets.
 
 ```python
@@ -596,6 +603,7 @@ print(X_train.shape, X_test.shape)
 ---
 
 ## **3. Feature Scaling**
+
 Feature scaling improves model performance by normalizing the data.
 
 ```python
@@ -617,6 +625,7 @@ X_test = pd.DataFrame(X_test, columns=feature_columns)
 ---
 
 ## **4. Training the KNN Model**
+
 We train a **KNN classifier** with `K=5`.
 
 ```python
@@ -638,12 +647,15 @@ print(f"The accuracy of the KNN model is: {accuracy:.4f}")
 ---
 
 ## **5. Predicting for New Patients**
-To test the model, we will classify three new patients: 
+
+To test the model, we will classify three new patients:
+
 - **One with average values**.
 - **One with increased values (more deviation).**
 - **One with decreased values (less deviation).**
 
 ### **Create a New Patients Dataset**
+
 ```python
 # New patient data
 new_patients = {
@@ -671,6 +683,7 @@ predictions = knn.predict(new_patients_scaled)
 # Print results
 print("Predictions for new patients:", predictions)
 ```
+
 - **First patient** → **Benign**
 - **Second patient** → **Malignant**
 - **Third patient** → **Benign**
@@ -678,6 +691,7 @@ print("Predictions for new patients:", predictions)
 ---
 
 ## **6. Summary of the Process**
+
 1. **Loaded the patient dataset**.
 2. **Filtered and cleaned** unnecessary columns and missing values.
 3. **Split the data** into training and testing sets.
@@ -685,3 +699,126 @@ print("Predictions for new patients:", predictions)
 5. **Trained a KNN model** with `K=5`.
 6. **Evaluated model accuracy** on test data.
 7. **Tested model predictions** with new patients.
+
+# Sentiment Analysis
+
+### This notebook aims to demonstrate the full process of text classification (sentiment analysis) on movie reviews.
+
+#### The process followed is as follows:
+
+1. Data loading
+2. Rating distribution (Positive {>6} - Neutral {4–6} - Negative {<4})
+3. Text normalization
+4. Data splitting into training and test sets, creation of the bag-of-words model and its application to the texts
+5. Classification model creation
+6. Model evaluation
+7. Use of the classification model on new records
+
+```py
+# Check if spaCy is installed and download the Spanish model if necessary
+try:
+  import spacy
+except ImportError:
+  !python -m spacy download es_core_news_sm
+  import spacy
+
+import pandas as pd
+
+# URL of the dataset containing movie reviews
+url = 'https://drive.google.com/file/d/1m9nawSJI3SHNwlJaAP8ZFCFe0zE29LOe/view?usp=sharing'
+
+# Extract file ID and generate direct download link
+file_id = url.split('/')[-2]
+url_download = 'https://drive.google.com/uc?id=' + file_id
+
+# Load the compressed CSV file
+df = pd.read_csv(url_download, compression='zip', sep='\\|\\|', engine='python')
+
+# Display the first few records
+print(df.head())
+
+# Classification of sentiment polarity (Positive {>6}, Neutral {4–6}, Negative {<4})
+def classify_polarity(review_rate):
+    if 6 < review_rate <= 10:
+        return 'Positive'
+    elif 4 <= review_rate <= 6:
+        return 'Neutral'
+    else:
+        return 'Negative'
+
+# Apply the polarity classification function to the dataset
+df['polarity'] = df['review_rate'].apply(classify_polarity)
+
+# Show results with polarity column
+df
+
+```
+
+### Normalization of texts
+- lets define as text a review_tittle and the review_text
+```py
+df['texto'] = df['review_title'] + ' ' + df['review_text']
+
+# check te row 0
+df.loc[0, ['review_title', 'review_text', 'texto']]
+```
+
+### change the data to a numpy array
+```py
+df_sentiments = df[['texto', 'polarity']] # select the columns
+
+x = df_sentiments['texto'].to_numpy() # change the data to a numpy array
+y = df_sentiments['polarity'].to_numpy() # change the data to a numpy array
+```
+
+### Save only relevang information
+
+```py
+import re
+
+from tqdm import tqdm
+
+# Importamos el modelo en español de spacy
+nlp = spacy.load('es_core_news_sm')
+
+
+def normalize(corpus):
+    """Función que dada una lista de textos, devuelve esa misma lista de textos
+       con los textos normalizados, realizando las siguientes tareas:
+       1.- Pasamos la palabra a minúsculas
+       2.- Elimina signos de puntuación
+       3.- Elimina las palabras con menos de 3 caracteres (palabras que seguramente no aporten significado)
+       4.- Elimina las palabras con más de 11 caracteres (palabras "raras" que seguramente no aporten significado)
+       5.- Elimina las stop words (palabras que no aportan significado como preposiciones, determinantes, etc.)
+       6.- Elimina los saltos de línea (en caso de haberlos)
+       7.- Eliminamos todas las palabras que no sean Nombres, adjetivos, verbos o advervios
+    """
+    for index, doc in enumerate(tqdm(corpus)):
+        doc = nlp(doc.lower())
+        corpus[index] = " ".join([
+            word.lemma_ for word in doc if (not word.is_punct)
+            and (len(word.text) > 3)
+            and (len(word.text) < 11)
+             and (not word.is_stop)
+            and re.sub('\s+', ' ', word.text)
+            and (word.pos_ in ['NOUN', 'ADJ', 'VERB', 'ADV'])
+        ])
+
+    return corpus
+
+    # apply the normalization 
+    X_norm = normalize(x)
+
+    # change to panda
+    X_norm = pd.DataFrame({'texto': X_norm})
+    X_norm
+```
+#### save X_norm
+```py
+import pickle
+
+X_norm.to_pickle('X_norm.pkl') # save the normalized data to a pickle file
+
+X_norm_2 = pd.read_pickle('X_norm.pkl') # load from peackle to pandas dataframe
+X_norm_2
+```
