@@ -716,13 +716,12 @@ print("Predictions for new patients:", predictions)
 
 ```py
 # Check if spaCy is installed and download the Spanish model if necessary
-try:
-  import spacy
-except ImportError:
-  !python -m spacy download es_core_news_sm
-  import spacy
+import spacy
 
-import pandas as pd
+try:
+  nlp = spacy.load('es_core_news_sm')
+except OSError:
+  !python -m spacy download es_core_news_sm
 
 # URL of the dataset containing movie reviews
 url = 'https://drive.google.com/file/d/1m9nawSJI3SHNwlJaAP8ZFCFe0zE29LOe/view?usp=sharing'
@@ -755,7 +754,9 @@ df
 ```
 
 ### Normalization of texts
+
 - lets define as text a review_tittle and the review_text
+
 ```py
 df['texto'] = df['review_title'] + ' ' + df['review_text']
 
@@ -764,6 +765,7 @@ df.loc[0, ['review_title', 'review_text', 'texto']]
 ```
 
 ### change the data to a numpy array
+
 ```py
 df_sentiments = df[['texto', 'polarity']] # select the columns
 
@@ -806,14 +808,18 @@ def normalize(corpus):
 
     return corpus
 
-    # apply the normalization 
+    # apply the normalization
     X_norm = normalize(x)
+    # X_norm = pd.DataFrame({'texto': X_norm})
+    # X_norm
 
     # change to panda
     X_norm = pd.DataFrame({'texto': X_norm})
     X_norm
 ```
+
 #### save X_norm
+
 ```py
 import pickle
 
@@ -821,4 +827,53 @@ X_norm.to_pickle('X_norm.pkl') # save the normalized data to a pickle file
 
 X_norm_2 = pd.read_pickle('X_norm.pkl') # load from peackle to pandas dataframe
 X_norm_2
+```
+
+### divide partitions to test and train
+
+```py
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X_norm, y, test_size=0.2, random_state=42)
+```
+
+### We will perform a Bag of Words (BoW)
+
+- Data partitioning for information related to the text.
+
+```py
+from sklearn.feature_extraction.text import CountVectorizer
+my_bow = CountVectorizer(max_features=2000, min_df=3) # create the bag of words
+
+X_train_bow = my_bow.fit_transform(X_train['texto']) # create the bag of words for train
+X_test_bow = my_bow.transform(X_test['texto']) # create the bag of words for test
+```
+
+### We will select a machine of soport vector machine (SVM) as a classifier
+
+```py
+from sklearn.svm import LinearSVC
+
+my_soport_vector_machine = LinearSVC() # create the soport vector machine
+
+my_soport_vector_machine.fit(X_train_bow, y_train) # train the soport vector machine
+```
+
+1. Let's predict the **y_pred** the classification of **X_test_bow**
+2. Let's calculatge the **accuracy** between **y_pred** and **y_test**
+
+```py
+
+y_pred = my_soport_vector_machine.predict(X_test_bow) # predict the classification of X_test_bow
+
+y_pred # return the classification of X_test_bow
+```
+
+### calculate the percdentaje of accuracy betweeen y_pred and y_test of my soport vector machine
+
+```py
+from sklearn.metrics import accuracy_score
+
+presition = accuracy_score(y_test, y_pred) # calculate the percdentaje of accuracy
+print(f'Accuracy: {presition:.2f}')
 ```
