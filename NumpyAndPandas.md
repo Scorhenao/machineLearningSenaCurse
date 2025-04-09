@@ -872,8 +872,51 @@ y_pred # return the classification of X_test_bow
 ### calculate the percdentaje of accuracy betweeen y_pred and y_test of my soport vector machine
 
 ```py
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-presition = accuracy_score(y_test, y_pred) # calculate the percdentaje of accuracy
-print(f'Accuracy: {presition:.2f}')
+# metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, average='weighted')  # calculate the percentage of precision
+recall = recall_score(y_test, y_pred, average='weighted')  # calculate the percentage of recall
+f1 = f1_score(y_test, y_pred, average='weighted')  # calculate the percentage of f1
+
+# print results
+print(f'Accuracy: {accuracy:.2f}')
+print(f'Precision: {precision:.2f}')
+print(f'Recall: {recall:.2f}')
+print(f'F1: {f1:.2f}')
+```
+
+#### conclution
+
+- it seems that the model is not that condifent to clasify 50 - 50
+
+
+### Use the model
+```py
+my_reviews = {
+    "texto": [
+        'La película El casillo Vagabundo me pareció muy interesante, me gustó el desarrollo de la protagonista y que pasara por cambios de edad de forma mágica. También disfruté los detalles que Studio Ghibli hace por todos los escenarios.',
+        'Mi vecino Totoro Un clásico entrañable que captura la inocencia de la infancia y la magia de la naturaleza. Totoro se ha convertido en un ícono por una buena razón: es imposible no sonreír al verlo. La animación es cálida y encantadora, perfecta para toda la familia. es de estudio ghibli',
+        'ferdinan  es un toro que lo crearon en un entornov muy macho pero el solo era libre con una planta entonces se bolo y vivio muy contento hasta que se incontro con el pasado y pudo ser libre listo',
+        'Minecraft es una basura absoluta, una vergüenza sin alma que parece hecha por ejecutivos que jamás han agarrado un mouse en su vida, con una animación más falsa que el amor de ella, un guión tan vacío como el cerebro de petro, cero emoción, cero batallas épicas, ni siquiera un maldito Ender Dragon decente, solo diálogos basura y personajes que dan más pena que un creeper en modo pacífico, una película tan mala en toda la palabra',
+        'orgullo y prejuicio  es mucho más que una historia de amor. Es una obra maestra de observación social y una exploración de los errores humanos que nos impiden ver la verdad de los demás y de nosotros mismos. El Lenguaje antiguo del siglo XIX es hermoso y el estilo de escritura es fresco, ingenioso y lleno de diálogos brillantes y entretenidos'
+    ]
+}
+
+my_reviews = pd.DataFrame(my_reviews)
+
+my_reviews
+
+# normalizer
+my_reviews_norm = normalize(my_reviews['texto'])
+my_reviews    
+
+my_reviews_bow = my_bow.transform(my_reviews_norm)
+my_reviews_bow
+
+my_clasification = my_soport_vector_machine.predict(my_reviews_bow)
+my_clasification
+
+my_reviews_norm.to_numpy()
 ```
